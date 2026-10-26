@@ -10,7 +10,7 @@ import { subjects } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/subjects/$subjectId")({
-  validateSearch: (s: Record<string, unknown>): { topic?: string } => ({ topic: typeof s.topic === "string" ? s.topic : undefined }),
+  validateSearch: (s: Record<string, unknown>): { topic?: string } => (typeof s['topic'] === "string" ? { topic: s['topic'] } : {}),
   loader: ({ params }) => {
     const subject = subjects.find((s) => s.id === params.subjectId);
     if (!subject) throw notFound();
