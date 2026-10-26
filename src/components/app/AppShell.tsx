@@ -2,7 +2,7 @@ import { Link, useNavigate, useRouteContext, useRouterState } from "@tanstack/re
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ThemeToggle } from "@/lib/theme";
-import { Bell, BookOpen, CalendarDays, GraduationCap, LayoutDashboard, ListChecks, LogOut, Menu, WifiOff, X } from "lucide-react";
+import { Bell, BookOpen, CalendarDays, GraduationCap, LayoutDashboard, ListChecks, LogOut, Menu, TrendingUp, WifiOff, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { setupOffline, useOnline } from "@/lib/offline";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -15,6 +15,7 @@ const nav = [
   { to: "/subjects", label: "Subjects", icon: BookOpen },
   { to: "/schedule", label: "Schedule", icon: CalendarDays },
   { to: "/quizzes", label: "Quizzes", icon: ListChecks },
+  { to: "/progress", label: "Progress", icon: TrendingUp },
   { to: "/notifications", label: "Alerts", icon: Bell },
 ] as const;
 
@@ -104,7 +105,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <main className="mx-auto max-w-7xl px-4 py-6 pb-24 md:px-8 lg:pb-10">{children}</main>
       </div>
 
-      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t bg-card lg:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-6 border-t bg-card lg:hidden">
         {nav.map(({ to, label, icon: Icon }) => (
           <Link
             key={to}
