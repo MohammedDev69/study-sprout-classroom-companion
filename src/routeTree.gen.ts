@@ -9,82 +9,87 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as NotificationsRouteImport } from './routes/notifications'
-import { Route as ScheduleRouteImport } from './routes/schedule'
-import { Route as QuizzesIndexRouteImport } from './routes/quizzes.index'
-import { Route as QuizzesQuizIdRouteImport } from './routes/quizzes.$quizId'
-import { Route as SubjectsIndexRouteImport } from './routes/subjects.index'
-import { Route as SubjectsSubjectIdRouteImport } from './routes/subjects.$subjectId'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
+import { Route as AuthenticatedScheduleRouteImport } from './routes/_authenticated/schedule'
+import { Route as AuthenticatedQuizzesIndexRouteImport } from './routes/_authenticated/quizzes.index'
+import { Route as AuthenticatedQuizzesQuizIdRouteImport } from './routes/_authenticated/quizzes.$quizId'
+import { Route as AuthenticatedSubjectsIndexRouteImport } from './routes/_authenticated/subjects.index'
+import { Route as AuthenticatedSubjectsSubjectIdRouteImport } from './routes/_authenticated/subjects.$subjectId'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/_authenticated/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const NotificationsRoute = NotificationsRouteImport.update({
-  id: '/notifications',
-  path: '/notifications',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ScheduleRoute = ScheduleRouteImport.update({
-  id: '/schedule',
+const AuthenticatedNotificationsRoute =
+  AuthenticatedNotificationsRouteImport.update({
+    id: '/_authenticated/notifications',
+    path: '/notifications',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedScheduleRoute = AuthenticatedScheduleRouteImport.update({
+  id: '/_authenticated/schedule',
   path: '/schedule',
   getParentRoute: () => rootRouteImport,
 } as any)
-const QuizzesIndexRoute = QuizzesIndexRouteImport.update({
-  id: '/quizzes/',
-  path: '/quizzes/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const QuizzesQuizIdRoute = QuizzesQuizIdRouteImport.update({
-  id: '/quizzes/$quizId',
-  path: '/quizzes/$quizId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SubjectsIndexRoute = SubjectsIndexRouteImport.update({
-  id: '/subjects/',
-  path: '/subjects/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SubjectsSubjectIdRoute = SubjectsSubjectIdRouteImport.update({
-  id: '/subjects/$subjectId',
-  path: '/subjects/$subjectId',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const AuthenticatedQuizzesIndexRoute =
+  AuthenticatedQuizzesIndexRouteImport.update({
+    id: '/_authenticated/quizzes/',
+    path: '/quizzes/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedQuizzesQuizIdRoute =
+  AuthenticatedQuizzesQuizIdRouteImport.update({
+    id: '/_authenticated/quizzes/$quizId',
+    path: '/quizzes/$quizId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedSubjectsIndexRoute =
+  AuthenticatedSubjectsIndexRouteImport.update({
+    id: '/_authenticated/subjects/',
+    path: '/subjects/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedSubjectsSubjectIdRoute =
+  AuthenticatedSubjectsSubjectIdRouteImport.update({
+    id: '/_authenticated/subjects/$subjectId',
+    path: '/subjects/$subjectId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/notifications': typeof NotificationsRoute
-  '/schedule': typeof ScheduleRoute
-  '/quizzes/$quizId': typeof QuizzesQuizIdRoute
-  '/subjects/$subjectId': typeof SubjectsSubjectIdRoute
-  '/quizzes/': typeof QuizzesIndexRoute
-  '/subjects/': typeof SubjectsIndexRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
+  '/schedule': typeof AuthenticatedScheduleRoute
+  '/quizzes/$quizId': typeof AuthenticatedQuizzesQuizIdRoute
+  '/subjects/$subjectId': typeof AuthenticatedSubjectsSubjectIdRoute
+  '/quizzes/': typeof AuthenticatedQuizzesIndexRoute
+  '/subjects/': typeof AuthenticatedSubjectsIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/notifications': typeof NotificationsRoute
-  '/schedule': typeof ScheduleRoute
-  '/quizzes/$quizId': typeof QuizzesQuizIdRoute
-  '/subjects/$subjectId': typeof SubjectsSubjectIdRoute
-  '/quizzes': typeof QuizzesIndexRoute
-  '/subjects': typeof SubjectsIndexRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
+  '/schedule': typeof AuthenticatedScheduleRoute
+  '/quizzes/$quizId': typeof AuthenticatedQuizzesQuizIdRoute
+  '/subjects/$subjectId': typeof AuthenticatedSubjectsSubjectIdRoute
+  '/quizzes': typeof AuthenticatedQuizzesIndexRoute
+  '/subjects': typeof AuthenticatedSubjectsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/notifications': typeof NotificationsRoute
-  '/schedule': typeof ScheduleRoute
-  '/quizzes/$quizId': typeof QuizzesQuizIdRoute
-  '/subjects/$subjectId': typeof SubjectsSubjectIdRoute
-  '/quizzes/': typeof QuizzesIndexRoute
-  '/subjects/': typeof SubjectsIndexRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
+  '/_authenticated/schedule': typeof AuthenticatedScheduleRoute
+  '/_authenticated/quizzes/$quizId': typeof AuthenticatedQuizzesQuizIdRoute
+  '/_authenticated/subjects/$subjectId': typeof AuthenticatedSubjectsSubjectIdRoute
+  '/_authenticated/quizzes/': typeof AuthenticatedQuizzesIndexRoute
+  '/_authenticated/subjects/': typeof AuthenticatedSubjectsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
+    | '/dashboard'
     | '/notifications'
     | '/schedule'
     | '/quizzes/$quizId'
@@ -93,7 +98,7 @@ export interface FileRouteTypes {
     | '/subjects/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
+    | '/dashboard'
     | '/notifications'
     | '/schedule'
     | '/quizzes/$quizId'
@@ -102,87 +107,87 @@ export interface FileRouteTypes {
     | '/subjects'
   id:
     | '__root__'
-    | '/'
-    | '/notifications'
-    | '/schedule'
-    | '/quizzes/$quizId'
-    | '/subjects/$subjectId'
-    | '/quizzes/'
-    | '/subjects/'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/notifications'
+    | '/_authenticated/schedule'
+    | '/_authenticated/quizzes/$quizId'
+    | '/_authenticated/subjects/$subjectId'
+    | '/_authenticated/quizzes/'
+    | '/_authenticated/subjects/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  NotificationsRoute: typeof NotificationsRoute
-  ScheduleRoute: typeof ScheduleRoute
-  QuizzesQuizIdRoute: typeof QuizzesQuizIdRoute
-  SubjectsSubjectIdRoute: typeof SubjectsSubjectIdRoute
-  QuizzesIndexRoute: typeof QuizzesIndexRoute
-  SubjectsIndexRoute: typeof SubjectsIndexRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
+  AuthenticatedScheduleRoute: typeof AuthenticatedScheduleRoute
+  AuthenticatedQuizzesQuizIdRoute: typeof AuthenticatedQuizzesQuizIdRoute
+  AuthenticatedSubjectsSubjectIdRoute: typeof AuthenticatedSubjectsSubjectIdRoute
+  AuthenticatedQuizzesIndexRoute: typeof AuthenticatedQuizzesIndexRoute
+  AuthenticatedSubjectsIndexRoute: typeof AuthenticatedSubjectsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/notifications': {
-      id: '/notifications'
+    '/_authenticated/notifications': {
+      id: '/_authenticated/notifications'
       path: '/notifications'
       fullPath: '/notifications'
-      preLoaderRoute: typeof NotificationsRouteImport
+      preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/schedule': {
-      id: '/schedule'
+    '/_authenticated/schedule': {
+      id: '/_authenticated/schedule'
       path: '/schedule'
       fullPath: '/schedule'
-      preLoaderRoute: typeof ScheduleRouteImport
+      preLoaderRoute: typeof AuthenticatedScheduleRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/quizzes/': {
-      id: '/quizzes/'
+    '/_authenticated/quizzes/': {
+      id: '/_authenticated/quizzes/'
       path: '/quizzes'
       fullPath: '/quizzes/'
-      preLoaderRoute: typeof QuizzesIndexRouteImport
+      preLoaderRoute: typeof AuthenticatedQuizzesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/quizzes/$quizId': {
-      id: '/quizzes/$quizId'
+    '/_authenticated/quizzes/$quizId': {
+      id: '/_authenticated/quizzes/$quizId'
       path: '/quizzes/$quizId'
       fullPath: '/quizzes/$quizId'
-      preLoaderRoute: typeof QuizzesQuizIdRouteImport
+      preLoaderRoute: typeof AuthenticatedQuizzesQuizIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/subjects/': {
-      id: '/subjects/'
+    '/_authenticated/subjects/': {
+      id: '/_authenticated/subjects/'
       path: '/subjects'
       fullPath: '/subjects/'
-      preLoaderRoute: typeof SubjectsIndexRouteImport
+      preLoaderRoute: typeof AuthenticatedSubjectsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/subjects/$subjectId': {
-      id: '/subjects/$subjectId'
+    '/_authenticated/subjects/$subjectId': {
+      id: '/_authenticated/subjects/$subjectId'
       path: '/subjects/$subjectId'
       fullPath: '/subjects/$subjectId'
-      preLoaderRoute: typeof SubjectsSubjectIdRouteImport
+      preLoaderRoute: typeof AuthenticatedSubjectsSubjectIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  NotificationsRoute: NotificationsRoute,
-  ScheduleRoute: ScheduleRoute,
-  QuizzesQuizIdRoute: QuizzesQuizIdRoute,
-  SubjectsSubjectIdRoute: SubjectsSubjectIdRoute,
-  QuizzesIndexRoute: QuizzesIndexRoute,
-  SubjectsIndexRoute: SubjectsIndexRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
+  AuthenticatedScheduleRoute: AuthenticatedScheduleRoute,
+  AuthenticatedQuizzesQuizIdRoute: AuthenticatedQuizzesQuizIdRoute,
+  AuthenticatedSubjectsSubjectIdRoute: AuthenticatedSubjectsSubjectIdRoute,
+  AuthenticatedQuizzesIndexRoute: AuthenticatedQuizzesIndexRoute,
+  AuthenticatedSubjectsIndexRoute: AuthenticatedSubjectsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
