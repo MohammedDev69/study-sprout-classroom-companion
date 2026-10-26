@@ -2,6 +2,8 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, CloudDownload, CloudOff, CheckCircle2, Download, FileText, PlayCircle, Presentation } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { progressQuery, setLessonComplete } from "@/lib/progress";
 import { toggleSaved, useSaved } from "@/lib/offline";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -37,6 +39,18 @@ function SubjectPage() {
   const [topicId, setTopicId] = useState(search.topic ?? subject.topics[0]!.id);
   const saved = useSaved();
   const topic = subject.topics.find((t) => t.id === topicId) ?? subject.topics[0]!;
+  const qc = useQueryClient();
+  const { data: progress } = useQuery(progressQuery);
+  const lessonKey = `${subject.id}/${topic.id}`;
+  const done = !!progress?.lessons.some((l) => l.lesson_key === lessonKey);
+  const toggleDone = useMutation({
+    mutationFn: () => setLessonComplete(lessonKey, !done),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: progressQuery.queryKey });
+      toast.success(done ? "Marked as not done" : "Lesson completed 🎉");
+    },
+    onError: () => toast.error("Couldn't update your progress. Try again."),
+  });
 
   return (
     <div className="space-y-6 fade-up">
@@ -72,6 +86,17 @@ function SubjectPage() {
         <article className="rounded-2xl bg-card p-5 shadow-card md:p-8">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <h2 className="text-2xl font-bold">{topic.title}</h2>
+            <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => toggleDone.mutate()}
+              disabled={toggleDone.isPending}
+              className={cn(
+                "inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-semibold transition-colors disabled:opacity-60",
+                done ? "bg-success text-success-foreground" : "bg-primary text-primary-foreground",
+              )}
+            >
+              <CheckCircle2 className="h-4 w-4" /> {done ? "Completed" : "Mark complete"}
+            </button>
             <SaveButton
               on={saved.includes(`${subject.id}/${topic.id}`)}
               onClick={() => {
@@ -79,6 +104,7 @@ function SubjectPage() {
                 toast.success(on ? "Saved for offline" : "Removed from offline");
               }}
             />
+            </div>
           </div>
           <p className="mt-1 text-muted-foreground">{topic.summary}</p>
           <Tabs defaultValue="explanation" className="mt-6">

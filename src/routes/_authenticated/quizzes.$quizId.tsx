@@ -1,6 +1,9 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, CheckCircle2, Clock, RotateCcw, XCircle } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { progressQuery, recordAttempt } from "@/lib/progress";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
@@ -36,11 +39,19 @@ function QuizPlayer() {
 
   useEffect(() => {
     if (done) return;
-    if (left <= 0) { setDone(true); return; }
+    if (left <= 0) { submit(); return; }
     const t = setTimeout(() => setLeft((l) => l - 1), 1000);
     return () => clearTimeout(t);
   }, [left, done]);
 
+  const qc = useQueryClient();
+  const submit = () => {
+    setDone(true);
+    const s = scoreQuiz(quiz.questions, answers);
+    recordAttempt({ quiz_id: quiz.id, ...s })
+      .then(() => qc.invalidateQueries({ queryKey: progressQuery.queryKey }))
+      .catch(() => toast.error("Your score couldn't be saved to your progress."));
+  };
   const reset = () => { setI(0); setAnswers({}); setLeft(quiz.minutes * 60); setDone(false); };
   const q = quiz.questions[i]!;
   const set = (v: AnswerValue) => setAnswers((a) => ({ ...a, [q.id]: v }));
@@ -133,7 +144,7 @@ function QuizPlayer() {
         {i < quiz.questions.length - 1 ? (
           <button onClick={() => setI(i + 1)} className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-elegant">Next</button>
         ) : (
-          <button onClick={() => setDone(true)} className="rounded-xl bg-navy px-5 py-2.5 text-sm font-semibold text-navy-foreground">Submit quiz</button>
+          <button onClick={submit} className="rounded-xl bg-navy px-5 py-2.5 text-sm font-semibold text-navy-foreground">Submit quiz</button>
         )}
       </div>
     </div>
