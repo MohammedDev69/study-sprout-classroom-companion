@@ -31,7 +31,7 @@ const typeIcon = { PDF: FileText, Video: PlayCircle, Slides: Presentation };
 function SubjectPage() {
   const { subject } = Route.useLoaderData();
   const [topicId, setTopicId] = useState(subject.topics[0].id);
-  const topic = subject.topics.find((t) => t.id === topicId) ?? subject.topics[0];
+  const topic = subject.topics.find((t) => t.id === topicId) ?? subject.topics[0]!;
 
   return (
     <div className="space-y-6 fade-up">
