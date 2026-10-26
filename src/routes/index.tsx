@@ -98,10 +98,10 @@ function Dashboard() {
             ))}
           </div>
           <h2 className="mb-4 mt-6 text-xl font-bold">Quick quiz</h2>
-          <Link to="/quizzes/$quizId" params={{ quizId: quizzes[0].id }} className="card-lift block rounded-2xl bg-navy p-5 text-navy-foreground">
-            <p className="text-xs uppercase tracking-wide opacity-70">{quizzes[0].subject}</p>
-            <p className="mt-1 font-semibold">{quizzes[0].title}</p>
-            <p className="mt-3 text-xs opacity-70">{quizzes[0].questions.length} questions · {quizzes[0].minutes} min</p>
+          <Link to="/quizzes/$quizId" params={{ quizId: quizzes[0]!.id }} className="card-lift block rounded-2xl bg-navy p-5 text-navy-foreground">
+            <p className="text-xs uppercase tracking-wide opacity-70">{quizzes[0]!.subject}</p>
+            <p className="mt-1 font-semibold">{quizzes[0]!.title}</p>
+            <p className="mt-3 text-xs opacity-70">{quizzes[0]!.questions.length} questions · {quizzes[0]!.minutes} min</p>
           </Link>
         </section>
       </div>

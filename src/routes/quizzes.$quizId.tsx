@@ -42,7 +42,7 @@ function QuizPlayer() {
   }, [left, done]);
 
   const reset = () => { setI(0); setAnswers({}); setLeft(quiz.minutes * 60); setDone(false); };
-  const q = quiz.questions[i];
+  const q = quiz.questions[i]!;
   const set = (v: AnswerValue) => setAnswers((a) => ({ ...a, [q.id]: v }));
   const mm = String(Math.floor(left / 60)).padStart(2, "0");
   const ss = String(left % 60).padStart(2, "0");
