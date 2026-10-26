@@ -8,3 +8,7 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- App data is mock data in src/lib/data.ts (no backend yet); quiz grading lives in src/lib/quiz.ts with tests.
+- Shared app chrome (sidebar, mobile bottom nav, notification bell) is AppShell wrapping <Outlet/> in __root; notifications use an in-app context + browser Notification API.
+- PWA is manifest-only (public/manifest.json); no app-shell service worker, to keep previews safe.
