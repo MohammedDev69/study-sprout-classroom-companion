@@ -10,14 +10,21 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as ScheduleRouteImport } from './routes/schedule'
 import { Route as QuizzesIndexRouteImport } from './routes/quizzes.index'
+import { Route as QuizzesQuizIdRouteImport } from './routes/quizzes.$quizId'
 import { Route as SubjectsIndexRouteImport } from './routes/subjects.index'
 import { Route as SubjectsSubjectIdRouteImport } from './routes/subjects.$subjectId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ScheduleRoute = ScheduleRouteImport.update({
@@ -28,6 +35,11 @@ const ScheduleRoute = ScheduleRouteImport.update({
 const QuizzesIndexRoute = QuizzesIndexRouteImport.update({
   id: '/quizzes/',
   path: '/quizzes/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuizzesQuizIdRoute = QuizzesQuizIdRouteImport.update({
+  id: '/quizzes/$quizId',
+  path: '/quizzes/$quizId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SubjectsIndexRoute = SubjectsIndexRouteImport.update({
@@ -43,14 +55,18 @@ const SubjectsSubjectIdRoute = SubjectsSubjectIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/notifications': typeof NotificationsRoute
   '/schedule': typeof ScheduleRoute
+  '/quizzes/$quizId': typeof QuizzesQuizIdRoute
   '/subjects/$subjectId': typeof SubjectsSubjectIdRoute
   '/quizzes/': typeof QuizzesIndexRoute
   '/subjects/': typeof SubjectsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/notifications': typeof NotificationsRoute
   '/schedule': typeof ScheduleRoute
+  '/quizzes/$quizId': typeof QuizzesQuizIdRoute
   '/subjects/$subjectId': typeof SubjectsSubjectIdRoute
   '/quizzes': typeof QuizzesIndexRoute
   '/subjects': typeof SubjectsIndexRoute
@@ -58,7 +74,9 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/notifications': typeof NotificationsRoute
   '/schedule': typeof ScheduleRoute
+  '/quizzes/$quizId': typeof QuizzesQuizIdRoute
   '/subjects/$subjectId': typeof SubjectsSubjectIdRoute
   '/quizzes/': typeof QuizzesIndexRoute
   '/subjects/': typeof SubjectsIndexRoute
@@ -66,13 +84,28 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/schedule' | '/subjects/$subjectId' | '/quizzes/' | '/subjects/'
+    | '/'
+    | '/notifications'
+    | '/schedule'
+    | '/quizzes/$quizId'
+    | '/subjects/$subjectId'
+    | '/quizzes/'
+    | '/subjects/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/schedule' | '/subjects/$subjectId' | '/quizzes' | '/subjects'
+  to:
+    | '/'
+    | '/notifications'
+    | '/schedule'
+    | '/quizzes/$quizId'
+    | '/subjects/$subjectId'
+    | '/quizzes'
+    | '/subjects'
   id:
     | '__root__'
     | '/'
+    | '/notifications'
     | '/schedule'
+    | '/quizzes/$quizId'
     | '/subjects/$subjectId'
     | '/quizzes/'
     | '/subjects/'
@@ -80,7 +113,9 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  NotificationsRoute: typeof NotificationsRoute
   ScheduleRoute: typeof ScheduleRoute
+  QuizzesQuizIdRoute: typeof QuizzesQuizIdRoute
   SubjectsSubjectIdRoute: typeof SubjectsSubjectIdRoute
   QuizzesIndexRoute: typeof QuizzesIndexRoute
   SubjectsIndexRoute: typeof SubjectsIndexRoute
@@ -95,6 +130,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/schedule': {
       id: '/schedule'
       path: '/schedule'
@@ -107,6 +149,13 @@ declare module '@tanstack/react-router' {
       path: '/quizzes'
       fullPath: '/quizzes/'
       preLoaderRoute: typeof QuizzesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quizzes/$quizId': {
+      id: '/quizzes/$quizId'
+      path: '/quizzes/$quizId'
+      fullPath: '/quizzes/$quizId'
+      preLoaderRoute: typeof QuizzesQuizIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/subjects/': {
@@ -128,7 +177,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  NotificationsRoute: NotificationsRoute,
   ScheduleRoute: ScheduleRoute,
+  QuizzesQuizIdRoute: QuizzesQuizIdRoute,
   SubjectsSubjectIdRoute: SubjectsSubjectIdRoute,
   QuizzesIndexRoute: QuizzesIndexRoute,
   SubjectsIndexRoute: SubjectsIndexRoute,
