@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useNotifications } from "@/lib/notifications";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/notifications")({
+export const Route = createFileRoute("/_authenticated/notifications")({
   head: () => ({
     meta: [
       { title: "Alerts & Notifications — Studia" },

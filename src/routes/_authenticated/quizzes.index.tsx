@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Clock, HelpCircle } from "lucide-react";
 import { quizzes } from "@/lib/data";
 
-export const Route = createFileRoute("/quizzes/")({
+export const Route = createFileRoute("/_authenticated/quizzes/")({
   head: () => ({
     meta: [
       { title: "Quizzes — Studia" },

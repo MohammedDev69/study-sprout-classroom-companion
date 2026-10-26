@@ -114,6 +114,33 @@
   --shadow-elegant: 0 12px 32px -12px color-mix(in oklab, var(--primary) 45%, transparent);
 }
 
+.dark {
+  --background: oklch(0.16 0.035 265);
+  --foreground: oklch(0.95 0.015 255);
+  --card: oklch(0.21 0.045 265);
+  --card-foreground: oklch(0.95 0.015 255);
+  --popover: oklch(0.21 0.045 265);
+  --popover-foreground: oklch(0.95 0.015 255);
+  --primary: oklch(0.6 0.2 262);
+  --primary-foreground: oklch(0.985 0.01 254);
+  --primary-glow: oklch(0.7 0.16 255);
+  --secondary: oklch(0.27 0.06 264);
+  --secondary-foreground: oklch(0.88 0.05 255);
+  --muted: oklch(0.25 0.04 264);
+  --muted-foreground: oklch(0.7 0.035 258);
+  --accent: oklch(0.27 0.06 264);
+  --accent-foreground: oklch(0.92 0.03 255);
+  --border: oklch(0.3 0.045 264);
+  --input: oklch(0.3 0.045 264);
+  --navy: oklch(0.12 0.03 265);
+  --navy-2: oklch(0.3 0.12 265);
+  --navy-foreground: oklch(0.93 0.03 255);
+  --sidebar: oklch(0.12 0.03 265);
+  --sidebar-accent: oklch(0.22 0.05 265);
+  --sidebar-border: oklch(0.25 0.04 265);
+  --shadow-card: 0 1px 2px oklch(0 0 0 / 30%), 0 8px 24px -12px oklch(0 0 0 / 50%);
+}
+
 @layer base {
   * {
     border-color: var(--color-border);

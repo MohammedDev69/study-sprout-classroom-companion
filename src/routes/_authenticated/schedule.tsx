@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { events, type EventType } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/schedule")({
+export const Route = createFileRoute("/_authenticated/schedule")({
   head: () => ({
     meta: [
       { title: "Schedule & Timetable — Studia" },

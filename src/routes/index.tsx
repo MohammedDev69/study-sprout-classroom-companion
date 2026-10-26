@@ -1,110 +1,111 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, CalendarDays, Clock, Flame, ListChecks, Trophy } from "lucide-react";
-import { Progress } from "@/components/ui/progress";
-import { SubjectIcon } from "@/components/app/SubjectIcon";
-import { events, quizzes, subjects } from "@/lib/data";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { CalendarDays, GraduationCap, ListChecks, Loader2, WifiOff } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import cover from "@/assets/cover.jpg";
+import { lovable } from "@/integrations/lovable";
+import { supabase } from "@/integrations/supabase/client";
+import { ThemeToggle } from "@/lib/theme";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Dashboard — Studia" },
-      { name: "description", content: "Your courses, upcoming classes and quizzes at a glance." },
-      { property: "og:title", content: "Dashboard — Studia" },
-      { property: "og:description", content: "Your courses, upcoming classes and quizzes at a glance." },
+      { title: "Studia — Your study space, anywhere" },
+      { name: "description", content: "Lessons, step-by-step solutions, schedules and timed quizzes. Sign in with Google to start." },
+      { property: "og:title", content: "Studia — Your study space, anywhere" },
+      { property: "og:description", content: "Lessons, step-by-step solutions, schedules and timed quizzes. Sign in with Google to start." },
     ],
   }),
-  component: Dashboard,
+  component: Cover,
 });
 
-const stats = [
-  { label: "Study streak", value: "12 days", icon: Flame },
-  { label: "Avg. quiz score", value: "84%", icon: Trophy },
-  { label: "Hours this week", value: "17.5", icon: Clock },
-  { label: "Quizzes done", value: "23", icon: ListChecks },
+const features = [
+  { icon: GraduationCap, label: "Lessons & solutions" },
+  { icon: CalendarDays, label: "Smart schedule" },
+  { icon: ListChecks, label: "Timed quizzes" },
+  { icon: WifiOff, label: "Works offline" },
 ];
 
-function Dashboard() {
-  const upcoming = events.filter((e) => e.dayOffset >= 0).sort((a, b) => a.dayOffset - b.dayOffset).slice(0, 4);
+function Cover() {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) navigate({ to: "/dashboard", replace: true });
+    });
+  }, [navigate]);
+
+  const signIn = async () => {
+    setLoading(true);
+    const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
+    if (result.error) {
+      setLoading(false);
+      toast.error("Google sign-in didn't complete. Please try again.");
+      return;
+    }
+    if (result.redirected) return;
+    navigate({ to: "/dashboard", replace: true });
+  };
+
   return (
-    <div className="space-y-8 fade-up">
-      <section className="relative overflow-hidden rounded-3xl bg-hero p-6 text-primary-foreground md:p-10">
-        <p className="text-sm font-medium opacity-80">Welcome back, Mohamed</p>
-        <h1 className="mt-2 max-w-xl text-3xl font-extrabold tracking-tight md:text-4xl">
-          You have 2 classes today and a quiz in 2 days.
-        </h1>
-        <div className="mt-6 flex flex-wrap gap-3">
-          <Link to="/quizzes" className="inline-flex items-center gap-2 rounded-xl bg-card px-4 py-2.5 text-sm font-semibold text-foreground">
-            Practise now <ArrowRight className="h-4 w-4" />
-          </Link>
-          <Link to="/schedule" className="inline-flex items-center gap-2 rounded-xl border border-primary-foreground/30 px-4 py-2.5 text-sm font-semibold">
-            View schedule
-          </Link>
-        </div>
-        <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-primary-glow/30 blur-3xl" />
-      </section>
-
-      <section className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        {stats.map(({ label, value, icon: Icon }) => (
-          <div key={label} className="rounded-2xl bg-card p-5 shadow-card">
-            <Icon className="h-5 w-5 text-primary" />
-            <p className="mt-3 text-2xl font-bold">{value}</p>
-            <p className="text-sm text-muted-foreground">{label}</p>
+    <div className="grid min-h-screen bg-background lg:grid-cols-2">
+      <div className="relative flex flex-col px-6 py-6 md:px-12">
+        <header className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="grid h-9 w-9 place-items-center rounded-xl bg-primary text-primary-foreground">
+              <GraduationCap className="h-5 w-5" />
+            </div>
+            <span className="text-lg font-bold tracking-tight">Studia</span>
           </div>
-        ))}
-      </section>
+          <ThemeToggle />
+        </header>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        <section className="lg:col-span-2">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-xl font-bold">Your subjects</h2>
-            <Link to="/subjects" className="text-sm font-medium text-primary">See all</Link>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {subjects.slice(0, 4).map((s) => (
-              <Link key={s.id} to="/subjects/$subjectId" params={{ subjectId: s.id }} className="card-lift rounded-2xl bg-card p-5 shadow-card">
-                <div className="flex items-center gap-3">
-                  <div className="grid h-11 w-11 place-items-center rounded-xl bg-secondary text-primary">
-                    <SubjectIcon icon={s.icon} className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="font-semibold">{s.name}</p>
-                    <p className="text-xs text-muted-foreground">{s.instructor}</p>
-                  </div>
-                </div>
-                <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
-                  <span>Progress</span><span className="font-semibold text-foreground">{s.progress}%</span>
-                </div>
-                <Progress value={s.progress} className="mt-2 h-2" />
-              </Link>
+        <main className="fade-up my-auto max-w-lg py-12">
+          <p className="text-sm font-semibold uppercase tracking-widest text-primary">Your study space</p>
+          <h1 className="mt-3 text-4xl font-extrabold leading-tight tracking-tight md:text-5xl">
+            Learn smarter. <span className="text-primary">Stay on track.</span>
+          </h1>
+          <p className="mt-4 text-lg text-muted-foreground">
+            Lessons, step-by-step solutions, your timetable and quizzes with instant feedback — all in one place.
+          </p>
+
+          <button
+            onClick={signIn}
+            disabled={loading}
+            className="mt-8 inline-flex w-full items-center justify-center gap-3 rounded-xl bg-card px-5 py-3.5 font-semibold text-card-foreground shadow-card ring-1 ring-border transition hover:shadow-elegant disabled:opacity-60 sm:w-auto"
+          >
+            {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <GoogleMark />}
+            Continue with Google
+          </button>
+
+          <ul className="mt-10 grid grid-cols-2 gap-3">
+            {features.map(({ icon: Icon, label }) => (
+              <li key={label} className="flex items-center gap-2.5 text-sm text-muted-foreground">
+                <span className="grid h-8 w-8 place-items-center rounded-lg bg-secondary text-primary"><Icon className="h-4 w-4" /></span>
+                {label}
+              </li>
             ))}
-          </div>
-        </section>
+          </ul>
+        </main>
+        <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} Studia</p>
+      </div>
 
-        <section>
-          <h2 className="mb-4 text-xl font-bold">Coming up</h2>
-          <div className="space-y-3 rounded-2xl bg-card p-4 shadow-card">
-            {upcoming.map((e) => (
-              <div key={e.id} className="flex items-start gap-3 rounded-xl p-2 hover:bg-secondary/60">
-                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-secondary text-primary">
-                  <CalendarDays className="h-4.5 w-4.5" />
-                </div>
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold">{e.title}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {e.dayOffset === 0 ? "Today" : e.dayOffset === 1 ? "Tomorrow" : `In ${e.dayOffset} days`} · {e.start}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <h2 className="mb-4 mt-6 text-xl font-bold">Quick quiz</h2>
-          <Link to="/quizzes/$quizId" params={{ quizId: quizzes[0]!.id }} className="card-lift block rounded-2xl bg-navy p-5 text-navy-foreground">
-            <p className="text-xs uppercase tracking-wide opacity-70">{quizzes[0]!.subject}</p>
-            <p className="mt-1 font-semibold">{quizzes[0]!.title}</p>
-            <p className="mt-3 text-xs opacity-70">{quizzes[0]!.questions.length} questions · {quizzes[0]!.minutes} min</p>
-          </Link>
-        </section>
+      <div className="relative hidden overflow-hidden lg:block">
+        <img src={cover} alt="Student studying with glowing study cards" width={1280} height={1280} className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/20 to-transparent" />
       </div>
     </div>
+  );
+}
+
+function GoogleMark() {
+  return (
+    <svg viewBox="0 0 48 48" className="h-5 w-5" aria-hidden>
+      <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z" />
+      <path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z" />
+      <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z" />
+      <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z" />
+    </svg>
   );
 }
