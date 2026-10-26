@@ -24,11 +24,13 @@ const stats = [
 ];
 
 function Dashboard() {
+  const { user } = Route.useRouteContext();
+  const firstName = ((user.user_metadata as { full_name?: string }).full_name ?? "student").split(" ")[0];
   const upcoming = events.filter((e) => e.dayOffset >= 0).sort((a, b) => a.dayOffset - b.dayOffset).slice(0, 4);
   return (
     <div className="space-y-8 fade-up">
       <section className="relative overflow-hidden rounded-3xl bg-hero p-6 text-primary-foreground md:p-10">
-        <p className="text-sm font-medium opacity-80">Welcome back, Mohamed</p>
+        <p className="text-sm font-medium opacity-80">Welcome back, {firstName}</p>
         <h1 className="mt-2 max-w-xl text-3xl font-extrabold tracking-tight md:text-4xl">
           You have 2 classes today and a quiz in 2 days.
         </h1>

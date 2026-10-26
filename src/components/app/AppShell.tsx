@@ -1,5 +1,8 @@
-import { Link, useRouterState } from "@tanstack/react-router";
-import { Bell, BookOpen, CalendarDays, GraduationCap, LayoutDashboard, ListChecks, Menu, WifiOff, X } from "lucide-react";
+import { Link, useNavigate, useRouteContext, useRouterState } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { ThemeToggle } from "@/lib/theme";
+import { Bell, BookOpen, CalendarDays, GraduationCap, LayoutDashboard, ListChecks, LogOut, Menu, WifiOff, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { setupOffline, useOnline } from "@/lib/offline";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -89,8 +92,9 @@ export function AppShell({ children }: { children: ReactNode }) {
             <Menu className="h-5 w-5" />
           </button>
           <div className="flex-1" />
+          <ThemeToggle />
           <NotificationBell />
-          <div className="grid h-9 w-9 place-items-center rounded-full bg-navy text-sm font-semibold text-navy-foreground">ME</div>
+          <UserMenu />
         </header>
         {!online && (
           <div className="flex items-center justify-center gap-2 bg-navy px-4 py-2 text-center text-sm text-navy-foreground">
@@ -150,6 +154,39 @@ function NotificationBell() {
         <Link to="/notifications" className="block border-t px-4 py-2.5 text-center text-sm font-medium text-primary">
           Notification settings
         </Link>
+      </PopoverContent>
+    </Popover>
+  );
+}
+
+function UserMenu() {
+  const { user } = useRouteContext({ from: "/_authenticated" });
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const meta = user.user_metadata as { full_name?: string; avatar_url?: string };
+  const name = meta.full_name ?? user.email ?? "Student";
+  const initials = name.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase();
+
+  const signOut = async () => {
+    await queryClient.cancelQueries();
+    queryClient.clear();
+    await supabase.auth.signOut();
+    navigate({ to: "/", replace: true });
+  };
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <button aria-label="Account" className="grid h-9 w-9 place-items-center overflow-hidden rounded-full bg-primary text-sm font-semibold text-primary-foreground">
+          {meta.avatar_url ? <img src={meta.avatar_url} alt="" className="h-full w-full object-cover" referrerPolicy="no-referrer" /> : initials}
+        </button>
+      </PopoverTrigger>
+      <PopoverContent align="end" className="w-64">
+        <p className="truncate font-semibold">{name}</p>
+        <p className="truncate text-xs text-muted-foreground">{user.email}</p>
+        <Button variant="outline" className="mt-4 w-full" onClick={signOut}>
+          <LogOut className="h-4 w-4" /> Sign out
+        </Button>
       </PopoverContent>
     </Popover>
   );
