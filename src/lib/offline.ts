@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 // Single place that registers the offline service worker. Never runs in dev or Lovable previews.
 const SW_URL = "/sw.js";
 
@@ -49,6 +50,33 @@ export function toggleSaved(id: string, url: string): boolean {
   localStorage.setItem(KEY, JSON.stringify(on ? [...list, id] : list.filter((x) => x !== id)));
   window.dispatchEvent(new Event("studia-saved"));
   // Warm the page cache so the lesson opens without internet later.
-  if (on) fetch(url, { headers: { accept: "text/html" }, credentials: "same-origin" }).catch(() => {});
+  if (on && "caches" in window) caches.open("studia-pages").then((c) => c.add(url)).catch(() => {});
   return on;
+}
+
+
+export function useSaved() {
+  const [saved, setSaved] = useState<string[]>([]);
+  useEffect(() => {
+    const sync = () => setSaved(getSaved());
+    sync();
+    window.addEventListener("studia-saved", sync);
+    return () => window.removeEventListener("studia-saved", sync);
+  }, []);
+  return saved;
+}
+
+export function useOnline() {
+  const [online, setOnline] = useState(true);
+  useEffect(() => {
+    const sync = () => setOnline(navigator.onLine);
+    sync();
+    window.addEventListener("online", sync);
+    window.addEventListener("offline", sync);
+    return () => {
+      window.removeEventListener("online", sync);
+      window.removeEventListener("offline", sync);
+    };
+  }, []);
+  return online;
 }
