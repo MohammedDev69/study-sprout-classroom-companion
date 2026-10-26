@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 import { initialNotices, type Notice } from "./data";
 
@@ -15,9 +15,10 @@ const NotificationsContext = createContext<Ctx | null>(null);
 
 export function NotificationsProvider({ children }: { children: ReactNode }) {
   const [notices, setNotices] = useState<Notice[]>(initialNotices);
-  const [permission, setPermission] = useState<Ctx["permission"]>(() =>
-    typeof window !== "undefined" && "Notification" in window ? Notification.permission : "unsupported",
-  );
+  const [permission, setPermission] = useState<Ctx["permission"]>("default");
+  useEffect(() => {
+    setPermission("Notification" in window ? Notification.permission : "unsupported");
+  }, []);
 
   const requestPermission = useCallback(async () => {
     if (!("Notification" in window)) {
