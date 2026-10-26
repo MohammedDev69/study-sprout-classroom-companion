@@ -7,7 +7,7 @@ import { SubjectIcon } from "@/components/app/SubjectIcon";
 import { subjects } from "@/lib/data";
 import { useSaved } from "@/lib/offline";
 
-export const Route = createFileRoute("/subjects/")({
+export const Route = createFileRoute("/_authenticated/subjects/")({
   head: () => ({
     meta: [
       { title: "Subjects & Solutions — Studia" },

@@ -4,7 +4,7 @@ import { Progress } from "@/components/ui/progress";
 import { SubjectIcon } from "@/components/app/SubjectIcon";
 import { events, quizzes, subjects } from "@/lib/data";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
       { title: "Dashboard — Studia" },

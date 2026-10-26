@@ -9,7 +9,7 @@ import { SubjectIcon } from "@/components/app/SubjectIcon";
 import { subjects } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/subjects/$subjectId")({
+export const Route = createFileRoute("/_authenticated/subjects/$subjectId")({
   validateSearch: (s: Record<string, unknown>): { topic?: string } => (typeof s['topic'] === "string" ? { topic: s['topic'] } : {}),
   loader: ({ params }) => {
     const subject = subjects.find((s) => s.id === params.subjectId);

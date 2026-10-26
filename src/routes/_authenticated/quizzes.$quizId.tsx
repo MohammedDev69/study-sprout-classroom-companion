@@ -8,7 +8,7 @@ import { quizzes, type Question } from "@/lib/data";
 import { isCorrect, scoreQuiz, type AnswerValue } from "@/lib/quiz";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/quizzes/$quizId")({
+export const Route = createFileRoute("/_authenticated/quizzes/$quizId")({
   loader: ({ params }) => {
     const quiz = quizzes.find((q) => q.id === params.quizId);
     if (!quiz) throw notFound();

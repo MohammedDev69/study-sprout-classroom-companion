@@ -8,7 +8,7 @@ import { useNotifications } from "@/lib/notifications";
 import { cn } from "@/lib/utils";
 
 const nav = [
-  { to: "/", label: "Dashboard", icon: LayoutDashboard },
+  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/subjects", label: "Subjects", icon: BookOpen },
   { to: "/schedule", label: "Schedule", icon: CalendarDays },
   { to: "/quizzes", label: "Quizzes", icon: ListChecks },
@@ -16,7 +16,7 @@ const nav = [
 ] as const;
 
 function isActive(path: string, to: string) {
-  return to === "/" ? path === "/" : path.startsWith(to);
+  return path.startsWith(to);
 }
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -49,7 +49,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   );
 
   const brand = (
-    <Link to="/" className="flex items-center gap-2.5 px-2">
+    <Link to="/dashboard" className="flex items-center gap-2.5 px-2">
       <div className="grid h-9 w-9 place-items-center rounded-xl bg-primary text-primary-foreground">
         <GraduationCap className="h-5 w-5" />
       </div>
