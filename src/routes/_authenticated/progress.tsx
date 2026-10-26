@@ -39,8 +39,6 @@ function ProgressPage() {
   const counts = new Map<string, number>();
   activity.forEach((d) => counts.set(dayKey(d), (counts.get(dayKey(d)) ?? 0) + 1));
   const today = new Date();
-  const start = new Date(today);
-  start.setDate(start.getDate() - 7 * 12 + 1 - start.getDay() + 6 - 6);
   const cells = Array.from({ length: 84 }, (_, i) => {
     const d = new Date(today);
     d.setDate(d.getDate() - (83 - i));
