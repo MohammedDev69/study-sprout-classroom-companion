@@ -11,4 +11,4 @@
 
 - App data is mock data in src/lib/data.ts (no backend yet); quiz grading lives in src/lib/quiz.ts with tests.
 - Shared app chrome (sidebar, mobile bottom nav, notification bell) is AppShell wrapping <Outlet/> in __root; notifications use an in-app context + browser Notification API.
-- PWA is manifest-only (public/manifest.json); no app-shell service worker, to keep previews safe.
+- Offline PWA uses vite-plugin-pwa generateSW (/sw.js), registered only from src/lib/offline.ts, which refuses dev/preview/iframe hosts; pages NetworkFirst, hashed assets CacheFirst.

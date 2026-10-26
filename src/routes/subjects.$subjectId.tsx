@@ -1,6 +1,8 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, CheckCircle2, Download, FileText, PlayCircle, Presentation } from "lucide-react";
+import { ArrowLeft, CloudDownload, CloudOff, CheckCircle2, Download, FileText, PlayCircle, Presentation } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
+import { toggleSaved, useSaved } from "@/lib/offline";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SubjectIcon } from "@/components/app/SubjectIcon";
@@ -8,6 +10,7 @@ import { subjects } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/subjects/$subjectId")({
+  validateSearch: (s: Record<string, unknown>): { topic?: string } => (typeof s['topic'] === "string" ? { topic: s['topic'] } : {}),
   loader: ({ params }) => {
     const subject = subjects.find((s) => s.id === params.subjectId);
     if (!subject) throw notFound();
@@ -30,7 +33,9 @@ const typeIcon = { PDF: FileText, Video: PlayCircle, Slides: Presentation };
 
 function SubjectPage() {
   const { subject } = Route.useLoaderData();
-  const [topicId, setTopicId] = useState(subject.topics[0]!.id);
+  const search = Route.useSearch();
+  const [topicId, setTopicId] = useState(search.topic ?? subject.topics[0]!.id);
+  const saved = useSaved();
   const topic = subject.topics.find((t) => t.id === topicId) ?? subject.topics[0]!;
 
   return (
@@ -65,7 +70,16 @@ function SubjectPage() {
         </aside>
 
         <article className="rounded-2xl bg-card p-5 shadow-card md:p-8">
-          <h2 className="text-2xl font-bold">{topic.title}</h2>
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <h2 className="text-2xl font-bold">{topic.title}</h2>
+            <SaveButton
+              on={saved.includes(`${subject.id}/${topic.id}`)}
+              onClick={() => {
+                const on = toggleSaved(`${subject.id}/${topic.id}`, `/subjects/${subject.id}?topic=${topic.id}`);
+                toast.success(on ? "Saved for offline" : "Removed from offline");
+              }}
+            />
+          </div>
           <p className="mt-1 text-muted-foreground">{topic.summary}</p>
           <Tabs defaultValue="explanation" className="mt-6">
             <TabsList className="bg-secondary">
@@ -122,5 +136,20 @@ function SubjectPage() {
         </article>
       </div>
     </div>
+  );
+}
+
+function SaveButton({ on, onClick }: { on: boolean; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        "inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-semibold transition-colors",
+        on ? "bg-success text-success-foreground" : "bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground",
+      )}
+    >
+      {on ? <CloudOff className="h-4 w-4" /> : <CloudDownload className="h-4 w-4" />}
+      {on ? "Saved offline" : "Save for offline"}
+    </button>
   );
 }

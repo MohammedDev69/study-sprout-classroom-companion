@@ -1,6 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Bell, BookOpen, CalendarDays, GraduationCap, LayoutDashboard, ListChecks, Menu, X } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { Bell, BookOpen, CalendarDays, GraduationCap, LayoutDashboard, ListChecks, Menu, WifiOff, X } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
+import { setupOffline, useOnline } from "@/lib/offline";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { useNotifications } from "@/lib/notifications";
@@ -21,6 +22,10 @@ function isActive(path: string, to: string) {
 export function AppShell({ children }: { children: ReactNode }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
   const [open, setOpen] = useState(false);
+  const online = useOnline();
+  useEffect(() => {
+    void setupOffline();
+  }, []);
 
   const links = (
     <nav className="flex flex-col gap-1">
@@ -87,6 +92,11 @@ export function AppShell({ children }: { children: ReactNode }) {
           <NotificationBell />
           <div className="grid h-9 w-9 place-items-center rounded-full bg-navy text-sm font-semibold text-navy-foreground">ME</div>
         </header>
+        {!online && (
+          <div className="flex items-center justify-center gap-2 bg-navy px-4 py-2 text-center text-sm text-navy-foreground">
+            <WifiOff className="h-4 w-4" /> You're offline — saved lessons are still available.
+          </div>
+        )}
         <main className="mx-auto max-w-7xl px-4 py-6 pb-24 md:px-8 lg:pb-10">{children}</main>
       </div>
 
