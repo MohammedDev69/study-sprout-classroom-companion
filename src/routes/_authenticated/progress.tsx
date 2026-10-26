@@ -47,7 +47,7 @@ function ProgressPage() {
 
   const stats = [
     { label: "Current streak", value: `${streak.current} day${streak.current === 1 ? "" : "s"}`, icon: Flame },
-    { label: "Best streak", value: `${streak.best} days`, icon: Medal },
+    { label: "Best streak", value: `${streak.best} day${streak.best === 1 ? "" : "s"}`, icon: Medal },
     { label: "Lessons completed", value: `${data.lessons.length} / ${totalLessons}`, icon: BookCheck },
     { label: "Average quiz score", value: data.attempts.length ? `${avg}%` : "—", icon: Trophy },
   ];
