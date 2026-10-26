@@ -22,7 +22,8 @@ export default defineConfig({
         manifest: false, // public/manifest.json is used
         devOptions: { enabled: false },
         workbox: {
-          swDest: "sw.js",
+          swDest: "dist/client/sw.js",
+          globDirectory: "dist/client",
           globPatterns: ["**/*.{js,css,png,svg,woff2}"],
           navigateFallback: null,
           cleanupOutdatedCaches: true,
